@@ -1,0 +1,37 @@
+@RequestParam一个属性一个作用:
+
+1.@RequestParam(required = false)设置为非必传。因为required值默认是true，所以默认必传。
+2.可以通过@RequestParam("userId")或者@RequestParam(value = "userId")指定参数名。
+3.可以通过@RequestParam(defaultValue = "0")指定参数默认值
+
+@JsonFormat、@JSONField、@DateTimeFormat的使用以及其区别
+
+JsonFormat来源于jackson,JSONField来源于fastjson，是阿里巴巴的开源框架，主要进行JSON解析和序列化。 
+DateTimeFormat是spring自带的处理框架，主要用于将时间格式化。
+
+DateTimeFormat：用法比较单一，只用于将字符串格式化成日期,@DateTimeFormat(pattern=”yyyy-MM-dd”)即可,
+有3个可选的属性：style，pattern和iso。
+Tables	Are	Cool
+短格式（这是缺省值）	SS	8/30/64 11:24 AM
+中等格式	MM	Aug 30, 1964 11:24:41 AM
+长格式	LL	August 30, 1964 11:24:41 AM CDT
+完整格式	FF	Sunday, August 30,1964 11:24:41 AM CDT
+使用短横线省略日期或时间	M-	Aug 30, 1964
+
+JsonFormat:属性值上 @JsonFormat(pattern=”yyyy-MM-dd”,timezone=”GMT+8”),
+如果直接使用 @JsonFormat(pattern=”yyyy-MM-dd”)就会出现2018-08-01 08:00:00的情况，
+ 会相差8个小时，因为我们是东八区（北京时间）。所以我们在格式化的时候要指定时区（timezone ）
+
+@JSONField注解的使用(fastjson的注解)
+
+@JSONField注解可以用在方法（method），属性（field）以及方法中的参数（parameter）上。
+JSONField中的name属性用来指定JSON串中key的名称。
+@JSONField作用在Field时,既可以指定前端传到bean对应的key值,又可以指定bean序列化成json的字段值;
+@JSONField也可以直接作用在get或set方法上,FastJson在进行操作时，
+是根据getter和setter的方法进行的，并不是依据Field进行。
+
+format规定日期格式 @JSONField(format="yyyy-MM-dd HH:mm:ss")
+
+ordinal规定字段的顺序 @JSONField(ordinal = 3) @JSONField(ordinal = 1)
+
+serialize/deserialize指定字段不序列化 @JSONField(serialize=false)

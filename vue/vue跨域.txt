@@ -1,0 +1,13 @@
+在本地hosts文件中,映射127.0.0.1为某一个域名时,本地启动的vue前端框架却不能用该域名访问,
+出现错误:
+	Invalid Host header
+原因是:
+	新版的webpack-dev-server增加了安全验证，默认检查hostname，如果hostname不是配置内的，将中断访问。
+解决方案:
+	在根目录下创建文件vue.config.js，然后填入如下内容
+
+	module.exports = {
+		devServer: {
+			disableHostCheck: true,
+		}
+	}

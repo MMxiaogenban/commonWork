@@ -1,0 +1,3 @@
+使用split函数进行多个空格分割:
+String[] words = str.split(" ");  数组中存储了空格
+String[] words = str.split("\\s+");  数组中不包括空格

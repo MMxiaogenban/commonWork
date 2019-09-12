@@ -1,0 +1,18 @@
+base64是双向加密的方式,spring给我们提供了一个工具类:org.springframework.util.Base64Utils,
+我们可以通过这个工具类进行简单的加密解密工作;
+  //加密
+        byte[] encode = Base64Utils.encode("zhubajie".getBytes());
+        String string = new String(encode,"UTF-8");//转成字符串
+        System.out.println(string);//原字符串:zhubajie --> 输出为:emh1YmFqaWU=
+	//解密
+	byte[] decode = Base64Utils.decode(string.getBytes("UTF-8"));
+	string = new String(decode,"UTF-8");//转成字符串
+	System.out.println(string);//原字符串:emh1YmFqaWU= --> 输出为:zhubajie
+
+MD5是单向加密,目前网上所谓的MD5解密,是建立在大数据面前,
+通过撞库来进行解密的.我们可以使用apache给我们提供的加密工具类:
+org.apache.commons.codec.digest.DigestUtils 进行简单的MD5加密:
+ //加密
+        String string = "zhubajie";
+        String md5Hex = DigestUtils.md5Hex(string);
+        System.out.println(md5Hex);//原字符串:zhubajie --> 380f38ebd3d1ae0a34906fda9dd08c1e

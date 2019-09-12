@@ -1,0 +1,31 @@
+mybatis-plus自带的分页功能,接口IPage<表对应实体类>  ,Page<表对应实体类>,
+属性包括:  
+	"records":[]分页的记录
+	"total": '',总记录数
+    "size": '',每页记录数
+    "current": '',当前页数
+    "searchCount": '',
+    "pages": ''总共多少页
+controller层
+
+@RequestMapping(value = "/getByPage", method = RequestMethod.POST)
+	public IPage<AuthModel> getByPage(@RequestBody Map<String,String> map){
+		int currentPage = Integer.parseInt(map.get("currentPage"));
+		int pageSize = Integer.parseInt(map.get("pageSize"));
+		Page page = new Page<>(currentPage,pageSize);
+        IPage<AuthModel> p= authService.getByPage(page);
+        return p;
+
+	}
+service层
+@Override
+	public IPage<AuthModel> getByPage(Page<AuthModel> modelPage) {
+		IPage<AuthModel> page = authMapper.selectPage(modelPage, null);
+		return page;
+	}
+dao层
+	public interface AuthMapper extends BaseMapper<AuthModel>{
+
+}
+
+

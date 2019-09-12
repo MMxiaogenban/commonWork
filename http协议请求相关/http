@@ -1,0 +1,16 @@
+http协议工作于客户端-服务端架构上.浏览器作为http客户端通过URL向HTTP服务器即WEB服务器发送请求;
+
+web服务器一般指网站服务器,可以向浏览器等web(http)客户端提供文档,放置网站文件,让全世界浏览,放置数据文件,让全世界下载,
+
+目前主流的web服务器是Apache,Nginx,IIS,websphere,weblogic,Tomcat,jboss,kangle;
+
+当web浏览器连到服务器上并请求文件时,服务器将处理该请求并将文件反馈到该浏览器上,附带的信息会告诉浏览器如何查看该文件
+(文件类型),服务器使用HTTP(超文本传输协议)与客户端浏览器进行信息交流,这就是人们常把他们称谓HTTP服务器的原因;
+
+为了解决HTTP协议不安全的缺陷,需要使用另一种协议;安全套接字层超文本传输协议HTTPS.为了数据传输的安全,HTTPS在http的基础上
+加入了SSL协议,SSL依靠证书来验证服务器的身份,并未浏览器和服务器之间的通信加密;
+
+web服务器就是来共http协议请求的,就是来展示文件文档的;
+
+http的请求方式
+restTemplate,httpclient,HttpUrlConnection,URLconnection等http请求

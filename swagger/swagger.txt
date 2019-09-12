@@ -1,0 +1,17 @@
+ <dependency>
+	<groupId>com.github.xiaoymin</groupId>
+	<artifactId>swagger-bootstrap-ui</artifactId>
+</dependency>
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger-ui</artifactId>
+</dependency>
+
+
+引入依赖,本地启动,通过下面的url进行访问
+
+http:localhost:端口号/虚拟目录/swagger-ui.html
+它的依赖是上面的springfox-swagger-ui
+http:localhost:端口号/虚拟目录/doc.html
+它的依赖是上面的swagger-bootstrap-ui,画面更加复杂一些,更加友好,页面好看
+

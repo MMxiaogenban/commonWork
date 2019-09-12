@@ -1,0 +1,74 @@
+         <!-- Elasticsearch依赖 -->
+        <dependency>
+            <groupId>com.niwodai.framework</groupId>
+            <artifactId>nwd-elasticsearch-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>transport-netty4-client</artifactId>
+            <version>6.1.1</version>
+        </dependency>
+		
+		
+		
+		
+		
+		@Value("${spring.data.elasticsearch.cluster-name}")
+	private static String clusterName;
+	@Value("${spring.data.elasticsearch.cluster-nodes}")
+	private static String host;
+	@Value("${spring.data.elasticsearch.properties.port}")
+	private static Integer port;
+
+	/** 构建Settings 对象 */
+	private static Settings settings = Settings.builder().put("cluster.name", clusterName).build();
+
+	/** TransportClient 对象, 用于连接ES集群 */
+	private static volatile TransportClient client;
+
+	private static String INDEX = "index_name";
+	private static String TYPE = "type_name";
+		
+		
+		
+		@Override
+	public Page<ClientLogDto> getLogByPageFromEs(Page<ClientLogDto> clientLogDtoPage) {
+		client = getClient();
+		log.info("scroll 模式启动！");
+		Date begin = new Date();
+		SearchResponse scrollResponse = ClientLogServiceImpl.client.prepareSearch(INDEX).
+		addSort(SortBuilders.fieldSort("_doc")).setSize(10000).setScroll(TimeValue.timeValueMinutes(1))
+				.execute().actionGet();
+		long count = scrollResponse.getHits().getTotalHits();//第一次不返回数据
+		for(int i=0,sum=0; sum<count; i++){
+			scrollResponse = ClientLogServiceImpl.client.prepareSearchScroll(scrollResponse.getScrollId())
+					.setScroll(TimeValue.timeValueMinutes(8))
+					.execute().actionGet();
+			sum += scrollResponse.getHits().getHits().length;
+			log.info("总量"+count+" 已经查到"+sum);
+		}
+		Date end = new Date();
+		log.info("耗时: "+(end.getTime()-begin.getTime()));
+		return null;
+	}
+
+	/**
+	 * 初始化一个es的客户端对象
+	 * @return
+	 */
+	public static TransportClient getClient(){
+		if(client == null){
+			synchronized (TransportClient.class){
+				client = new PreBuiltTransportClient(settings);
+				try {
+					String[] allHost = host.split(",");
+					for (String str:allHost) {
+						client.addTransportAddresses(new TransportAddress(InetAddress.getByName(str), port));
+					}
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return client;
+	}

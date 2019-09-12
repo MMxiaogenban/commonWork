@@ -1,0 +1,28 @@
+mysql和postgresql数据的sql语句
+#将搜索结果插入到另外一张相同字段的表中
+insert into table_A values(a,b,c...) select * from table where....各种条件
+
+#大于某个时间的sql语句
+select * from face_compare where create_time>=to_date('2019-06-13', 'yyyy-MM-dd')
+
+#删除数据库中重复的值的sql,让数据库只存在一个(一定要给最里面的子查询定义一个别名)
+DELETE FROM ordersales
+WHERE
+    OrderName IN (SELECT
+        *
+    FROM
+        (SELECT
+            OrderName
+        FROM
+            ordersales
+        GROUP BY OrderName
+        HAVING COUNT(OrderName) > 1) t1)
+    AND Id NOT IN (SELECT
+        *
+    FROM
+        (SELECT
+            MIN(Id)
+        FROM
+            ordersales
+        GROUP BY OrderName
+        HAVING COUNT(OrderName) > 1) t2)
